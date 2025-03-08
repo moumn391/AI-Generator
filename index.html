@@ -129,12 +129,13 @@
     </footer>
 
     <script>
+        emailjs.init("lfEQyt1ihUN93pFZP");
         document.getElementById('contact-form').addEventListener('submit', function(event) {
             event.preventDefault();
             emailjs.send("service_pm7hlhv", "template_2i6535a", {
                 email: document.getElementById("email").value,
                 message: document.getElementById("message").value
-            }, "lfEQyt1ihUN93pFZP").then(function(response) {
+            }).then(function(response) {
                 alert("Message Sent Successfully!");
             }, function(error) {
                 alert("Failed to send message.");
@@ -146,11 +147,11 @@
                 try {
                     await window.solana.connect();
                     const provider = window.solana;
-                    const recipient = "4HP5UEaWJYyR7E1NS6G8eQqgySNLC95HwLPcmUqChgjx";
+                    const recipient = new solanaWeb3.PublicKey("4HP5UEaWJYyR7E1NS6G8eQqgySNLC95HwLPcmUqChgjx");
                     const transaction = new solanaWeb3.Transaction().add(
                         solanaWeb3.SystemProgram.transfer({
                             fromPubkey: provider.publicKey,
-                            toPubkey: new solanaWeb3.PublicKey(recipient),
+                            toPubkey: recipient,
                             lamports: 10000000 // 0.01 SOL
                         })
                     );
@@ -164,7 +165,6 @@
             }
         });
     </script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
